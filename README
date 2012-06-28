@@ -1,0 +1,21 @@
+MOO Code
+========
+
+Rob Myers <rob@robmyers.org>
+
+Various code for LambdaMOO.
+
+How To Use
+----------
+
+Open the file containing the code you are interested in, copy the text, and paste it into a MOO session.
+
+;"Lines like this are comments and will be ignored by the MOO."
+
+
+License
+-------
+
+I have dedicated this code to the public domain using CC0 as I don't want to
+think about how copyleft would work in a 20-year-old VR with thousands of
+previous authors and no clear contributors policy. :-)
