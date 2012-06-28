@@ -14,19 +14,18 @@
 
 @property "Translation Feature".leet {" ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "@", "13", "<", "[)", "&", "]=", "9", "#", "|", "_/", "|X", "|_", "/\\/\\", "/\\/", "()", "|o", "0,", "2", "$", "+", "(_)", "\\'", "vv", "><", "`//", "~/_", "[", "\\", "]", "^", "_", "`",  "4", "8", "(", "|)", "3", "|=", "6", "|-|", "!", "]", "|<", "1", "44", "|\|", "0", "|*", "0_", "|2", "5", "7", "|_|", "\\/", "\\/\\/", "%", "J", "2", "{", "|", "}", "~"}
 
-
-
 @property "Translation Feature".morse {" ", "-.-.--", ".-..-.", "#", "...-..-", "%", ".-..", ".----.", "-.--.", "-.--.-", "*", ".-.-.", "--..--", "-....-", ".-.-.-", "-..-.", "-----", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "---...", "-.-.-.", "<", "-...-", ">", "..--..", ".--.-.", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.--", ".-.", "...", "-", "..-", "...-", ".--", "--..--", "-.--", "--..", "[", "\\", "]", "^", "..--.-", "`", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.--", ".-.", "...", "-", "..-", "...-", ".--", "--..--", "-.--", "--..", "{", "|", "}", "~"}
 
-@property "Translation Feature".nato {"    ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "DASH ", "Stop ", "/", "Zero ", "One ", "Two ", "Three ", "Four ", "Five ", "Six ", "Seven ", "Eight ", "Nine", ":", ";", "<", "=", ">", "?", "@", "ALFA ", "BRAVO ", "CHARLIE ", "DELTA ", "ECHO ", "FOXTROT ", "GOLF ", "HOTEL ", "INDIA ", "JULIETT ", "KILO ", "LIMA ", "MIKE ", "NOVEMBER ", "OSCAR ", "PAPA ", "QUEBEC ", "ROMEO ", "SIERRA ", "TANGO ", "UNIFORM ", "VICTOR ", "WHISKEY ", "X-RAY ", "YANKEE ", "ZULU ", "[", "\\", "]", "^", "_", "`", "alfa ", "bravo ", "charlie ", "delta ", "echo ", "foxtrot ", "golf ", "hotel ", "india ", "juliett ", "kilo ", "lima ", "mike ", "november ", "oscar ", "papa ", "quebec ", "romeo ", "sierra ", "tango ", "uniform ", "victor ", "whiskey ", "x-ray ", "yankee ", "zulu ", "{", "|", "}", "~"}
+@property "Translation Feature".nato {"  ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "DASH ", "Stop ", "/", "Zero ", "One ", "Two ", "Three ", "Four ", "Five ", "Six ", "Seven ", "Eight ", "Nine", ":", ";", "<", "=", ">", "?", "@", "ALFA ", "BRAVO ", "CHARLIE ", "DELTA ", "ECHO ", "FOXTROT ", "GOLF ", "HOTEL ", "INDIA ", "JULIETT ", "KILO ", "LIMA ", "MIKE ", "NOVEMBER ", "OSCAR ", "PAPA ", "QUEBEC ", "ROMEO ", "SIERRA ", "TANGO ", "UNIFORM ", "VICTOR ", "WHISKEY ", "X-RAY ", "YANKEE ", "ZULU ", "[", "\\", "]", "^", "_", "`", "alfa ", "bravo ", "charlie ", "delta ", "echo ", "foxtrot ", "golf ", "hotel ", "india ", "juliett ", "kilo ", "lima ", "mike ", "november ", "oscar ", "papa ", "quebec ", "romeo ", "sierra ", "tango ", "uniform ", "victor ", "whiskey ", "x-ray ", "yankee ", "zulu ", "{", "|", "}", "~"}
 
 ;"This is mostly for people to derive from"
 @property "Translation Feature".identity {" ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"}
 
-@verb "Translation Feature":leet any any any rxd
-@program "Translation Feature":leet
+@verb "Translation Feature":translate tnt rxd
+@program "Translation Feature":translate
 "Translate characters from string arg 1 through list arg 2";
-lookup = this.(verb);
+text = args[1];
+lookup = args[2];
 output = {};
 "Use a for loop rather than map_verb to avoid lots of verb calls";
 for index in [1..length(argstr)]
@@ -39,16 +38,35 @@ for index in [1..length(argstr)]
     output = {@output, char};
   endif
 endfor
-translated = "\"" + $string_utils:from_list(output, "") + "\"";
-player:tell("You say, " + translated);
-player.location:announce($string_utils:pronoun_sub("%N says, ") + translated);
+translated = $string_utils:from_list(output, "");
+return translated;
 .
 
-@addalias morse,nato,identity to "Translation Feature":leet
+@verb "Translation Feature":announce tnt rxd
+@program "Translation Feature":announce
+"Announce the message to the player and the player's location.";
+message =  "\"" + args[1]  + "\"";
+player:tell("You say, " + message);
+player.location:announce($string_utils:pronoun_sub("%N says, ") + message);
+.
+
+@verb "Translation Feature":leet any any any rxd
+@program "Translation Feature":leet
+lookup = this.(verb);
+translated = this:translate(argstr, lookup);
+this:announce(translated);
+.
+
+@verb "Translation Feature":nato any any any rxd
+@program "Translation Feature":nato
+lookup = this.(verb);
+translated = this:translate(argstr, lookup);
+"Trim trailing whitespace from translated output before announcing";
+this:announce($string_utils:trimr(translated));
+.
 
 @verb "Translation Feature":binary any any any rxd
 @program "Translation Feature":binary
-"Translate what the player says to binary";
 output = {};
 "Use a for loop rather than map_verb to avoid lots of verb calls";
 for index in [1..length(argstr)]
@@ -57,14 +75,11 @@ for index in [1..length(argstr)]
   output = {@output, $math_utils:BlFromInt(charnum)[25..32]};
 endfor
 translated = $string_utils:from_list($list_utils:flatten(output), "");
-quoted = "\"" + translated + "\"";
-player:tell("You say, " + quoted);
-player.location:announce($string_utils:pronoun_sub("%N says, ") + quoted);
+this:announce(translated);
 .
 
 @verb "Translation Feature":pig any any any rxd
 @program "Translation Feature":pig
-"Translate say to pig latin";
 words = $string_utils:words(argstr);
 output = {};
 for word in (words)
@@ -90,29 +105,23 @@ for word in (words)
   endif
 endfor
 translated = $string_utils:from_list(output, " ");
-quoted = "\"" + translated + "\"";
-player:tell("You say, " + quoted);
-player.location:announce($string_utils:pronoun_sub("%N says, ") + quoted);
+this:announce(translated);
 .
 
 @verb "Translation Feature":rsay any any any rxd
 @program "Translation Feature":rsay
-"Reverse the say";
 translated = $string_utils:reverse(argstr);
-quoted = "\"" + translated + "\"";
-player:tell("You say, " + quoted);
-player.location:announce($string_utils:pronoun_sub("%N says, ") + quoted);
+this:announce(translated);
 .
 
 @verb "Translation Feature":rwsay any any any rxd
 @program "Translation Feature":rwsay
-"Reverse each word of the say";
 words = $string_utils:words(argstr);
 output = $list_utils:map_arg($string_utils, "reverse", words);
 translated = $string_utils:from_list(output, " ");
-quoted = "\"" + translated + "\"";
-player:tell("You say, " + quoted);
-player.location:announce($string_utils:pronoun_sub("%N says, ") + quoted);
+this:announce(translated);
 .
+
+@addalias morse,identity to "Translation Feature":leet
 
 #"Translation Feature":set_feature_verbs({})

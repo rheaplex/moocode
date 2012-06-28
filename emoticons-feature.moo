@@ -7,7 +7,7 @@
 @create $feature called "Emoticons Feature"
 
 @describe "Emoticons Feature" as "A feature object for emoting emoticons."
-@set "Emoticons Feature".help_msg to {"A feature that simplifies emoting emoticons. It provides the following commands that print the following emoticons:", "  ems => :-)", "  emf => :-(", "  emm => :-/", "  emw => ;-)"}
+@set "Emoticons Feature".help_msg to {"A feature that simplifies emoting emoticons. It provides the following commands that print the following emoticons:", "  ems => :-)", "  emf => :-(", " emg => :-D", "  emm => :-/", "  emw => ;-)"}
 
 @property "Emoticons Feature".ems ":-)" rc
 @property "Emoticons Feature".emf ":-(" rc
