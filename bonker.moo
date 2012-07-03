@@ -32,21 +32,22 @@ return $string_utils:pronoun_sub(this.(verb));
 @verb "Bonker Feature":bonk any any any rxd
 @program "Bonker Feature":bonk
 "Bonk the player";
-"If dobj is not an object, a real object, or a player.";
-if ((typeof(dobj) == OBJ) && (toint(dobj) < 1) || (! is_player(dobj)))
+if (`! is_player(dobj) ! ANY => 1')
+  "If dobj is not a player.";
   player:tell($string_utils:pronoun_sub("You can't: %d isn't a player."));
-"If the player is not present";
 elseif (dobj.location != player.location)
+  "If the player is not present";
     player:tell($string_utils:pronoun_sub("You can't: %d isn't here."));
-"If the player is doing this to themself.";
 elseif (dobj == player)
+  "If the player is doing this to themself.";
   player:tell(this:self_bonk_dmsg());
   player:announce(this:self_bonk_msg());
 else
+  "The player is doing this to another player";
     player:tell(this:bonk_omsg());
     player.location:announce_all_but({player, dobj}, this:bonk_msg());
     dobj:tell(this:bonk_dmsg());
 endif
 .
 
-#"Bonker Feature":set_feature_verbs({})
+;$string_utils:match_object("Bonker Feature", me):set_feature_verbs({"bonk"})
