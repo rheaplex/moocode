@@ -5,7 +5,20 @@
 @create $feature called "Translation Feature"
 
 @describe "Translation Feature" as "A feature object for translating says."
-@set "Translation Feature".help_msg to {"A feature object for translating text and saying it out loud.", "Not every verb can translate every character, untranslatable characters are simply kept unchanged.", "  binary <text> => say the text in ASCII binary", "  leet <text> => say the text in 1337", "  morse <text> => say the text in Morse code", "  nato <text> => say the text in the NATO phonetic alphabet", "  pig <text> => say the text in Pig Latin.", "  rsay <text> => say the text in reverse", "  rwsay <text> => say each word of the text in reverse"}
+@edit "Translation Feature".help_msg
+delete
+enter
+A feature object for translating text and saying it out loud.
+Not every verb can translate every character, untranslatable characters are simply kept unchanged.
+binary <text> => say the text in ASCII binary
+leet <text> => say the text in 1337
+morse <text> => say the text in Morse code
+nato <text> => say the text in the NATO phonetic alphabet
+pig <text> => say the text in Pig Latin.
+rsay <text> => say the text in reverse
+rwsay <text> => say each word of the text in reverse
+.
+save
 
 ;"one below space in ASCII"
 @property "Translation Feature".trans_above 31 rc
@@ -124,4 +137,4 @@ this:announce(translated);
 
 @addalias morse,identity to "Translation Feature":leet
 
-#"Translation Feature":set_feature_verbs({})
+;$string_utils:match_object("Translation Feature", me):set_feature_verbs({})
