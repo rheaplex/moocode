@@ -24,7 +24,7 @@ return shuffled_list[1..n];
 @verb generative_utils:maybe tnt rxd
 @program generative_utils:maybe
 "Call o:(verb)() 1/probability of the time";
-{object, verb, ?prob = 2, ?default = #-1} = args;
+{object, verb, ?prob = 2, ?default = $nothing} = args;
 if (random(prob) == 1)
   result = object:(verb)();
 else
@@ -36,7 +36,7 @@ return result;
 @verb generative_utils:maybe_choose_one tnt rxd
 @program generative_utils:maybe_choose_one
 "Choose one item from the list, or not";
-{the_list, ?prob = 2, ?default = #-1} = args;
+{the_list, ?prob = 2, ?default = $nothing} = args;
 if(random(prob) == 1)
   result = this:choose_one(the_list);
 else
@@ -48,7 +48,7 @@ return result;
 @verb generative_utils:maybe_choose_n tnt rxd
 @program generative_utils:maybe_choose_n
 "Choose n objects from list probability of the time.";
-{the_list, n, ?prob = 2, ?default = #-1} = args;
+{the_list, n, ?prob = 2, ?default = $nothing} = args;
 if(random(prob) == 1)
   result = this:choose_n(the_list, n);
 else
@@ -92,10 +92,10 @@ choose_n          (list, n)
   => n random items (chosen slowly) from list, n must be <= length(list)
 maybe             (function[ ,probability[, default]]) 
   => the result of calling function 1/probability of the time, otherwise default
-     probability defaults to 2, default defaults to #-1
+     probability defaults to 2, default defaults to $nothing
 maybe_choose_one  (list[, probability[, default]]) 
   => a random item from the list 1/probability of the time, else default
-     probability defaults to 2, default defaults to #-1
+     probability defaults to 2, default defaults to $nothing
 maybe_choose_n    (list, n[ ,probability[, default]]) 
   => a random item from the list 1/probability of the time, else default
      probability defaults to 2, default defaults to {}
