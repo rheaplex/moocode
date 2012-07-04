@@ -32,14 +32,17 @@ return $string_utils:pronoun_sub(this.(verb));
 @verb "Bonker Feature":bonk any any any rxd
 @program "Bonker Feature":bonk
 "Bonk the player";
-if (`! is_player(dobj) ! ANY => 1')
-  "If dobj is not a player.";
+if (! valid(dobj))
+  "If the direct object doesn't name anything in the player's location";
+  player:tell("You can't: " + dobjstr + " isn't here.");
+elseif (! is_player(dobj))
+  "If the direct object isn't a player";
   player:tell($string_utils:pronoun_sub("You can't: %d isn't a player."));
 elseif (dobj.location != player.location)
-  "If the player is not present";
+  "If the player is not in the same location as the other player";
     player:tell($string_utils:pronoun_sub("You can't: %d isn't here."));
 elseif (dobj == player)
-  "If the player is doing this to themself.";
+  "If the player is doing this to themself";
   player:tell(this:self_bonk_dmsg());
   player:announce(this:self_bonk_msg());
 else
