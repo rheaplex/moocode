@@ -1,4 +1,4 @@
-;;; moocode-mode.el - Major mode for editing MOO code files
+;;; moocode-mode.el - Major mode for editing LambdaMOO code files
 ;;
 ;; Copyright (C) 2012 Rob Myers <rob@robmyers.org>
 ;;
@@ -35,17 +35,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defcustom moocode-indent 2
-  "How much to indent each block. Defaults to LambdaMOO's formatting (2)"
+  "How much to indent each MOO code block. Defaults to LambdaMOO style (2)."
   :type '(integer)
   :group 'moocode-mode)
 
 (defcustom moocode-tab-indent t
-  "*Non-nil means TAB in MOO code mode calls `moocode-indent-line'"
+  "*Non-nil means TAB in MOO code major mode calls `moocode-indent-line'."
   :type 'boolean
   :group 'python-mode)
 
 (defcustom moocode-mode-hook nil
-  "Hook run when entering MOO code mode"
+  "Hook run when entering MOO code major mode."
   :type 'hook
   :group 'moocode-mode)
 
@@ -83,7 +83,7 @@
     ;; Built-in functions
     ("\\<\\(?:a\\(?:bs\\|cos\\|dd_\\(?:property\\|verb\\)\\|\\(?:si\\|ta\\)n\\)\\|b\\(?:inary_hash\\|oot_player\\|uffered_output_length\\)\\|c\\(?:all\\(?:_function\\|er\\(?:\\(?:_perm\\)?s\\)\\)\\|eil\\|h\\(?:ildren\\|parent\\)\\|lear_property\\|o\\(?:nnect\\(?:ed_\\(?:\\(?:player\\|second\\)s\\)\\|ion_\\(?:name\\|options?\\)\\)\\|sh?\\)\\|r\\(?:eate\\|ypt\\)\\|time\\)\\|d\\(?:b_disk_size\\|e\\(?:code_binary\\|lete_\\(?:property\\|verb\\)\\)\\|\\(?:isassembl\\|ump_databas\\)e\\)\\|e\\(?:ncode_binary\\|qual\\|val\\|xp\\)\\|f\\(?:l\\(?:o\\(?:\\(?:atst\\|o\\)r\\)\\|ush_input\\)\\|orce_input\\|unction_info\\)\\|i\\(?:dle_seconds\\|ndex\\|s_\\(?:clear_property\\|\\(?:memb\\|play\\)er\\)\\)\\|kill_task\\|l\\(?:ength\\|ist\\(?:append\\|delete\\|en\\(?:ers\\)?\\|\\(?:inser\\|se\\)t\\)\\|og\\(?:10\\)?\\)\\|m\\(?:a\\(?:tch\\|x\\(?:_object\\)?\\)\\|emory_usage\\|in\\|ove\\)\\|notify\\|o\\(?:bject_bytes\\|pen_network_connection\\|utput_delimiters\\)\\|p\\(?:a\\(?:rent\\|ss\\)\\|layers\\|ropert\\(?:ies\\|y_info\\)\\)\\|queue\\(?:_info\\|d_tasks\\)\\|r\\(?:a\\(?:ise\\|ndom\\)\\|e\\(?:ad\\|cycle\\|number\\|s\\(?:et_max_object\\|ume\\)\\)\\|index\\|match\\)\\|s\\(?:e\\(?:conds_left\\|rver_\\(?:log\\|version\\)\\|t\\(?:_\\(?:connection_option\\|p\\(?:layer_flag\\|roperty_info\\)\\|task_perms\\|verb_\\(?:args\\|code\\|info\\)\\)\\|add\\|remove\\)\\)\\|hutdown\\|inh?\\|qrt\\|tr\\(?:cmp\\|ing_hash\\|sub\\)\\|u\\(?:bstitute\\|spend\\)\\)\\|t\\(?:a\\(?:nh?\\|sk_\\(?:id\\|stack\\)\\)\\|i\\(?:cks_left\\|me\\)\\|o\\(?:float\\|int\\|literal\\|num\\|obj\\|str\\)\\|runc\\|ypeof\\)\\|unlisten\\|v\\(?:al\\(?:id\\|ue_\\(?:bytes\\|hash\\)\\)\\|erb\\(?:_\\(?:args\\|code\\|info\\)\\|s\\)\\)\\)\\>"
      . font-lock-builtin-face))
-  "Highlighting for MOO code mode")
+  "Highlighting for MOO code major mode.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation
@@ -119,7 +119,7 @@
      (indent-to indent)))
 
 (defun moocode-indent-line ()
-  "Indent the current line as MOO code"
+  "Indent the current line as MOO code."
   (interactive)
   (if moocode-tab-indent
       (moocode-indent-current-line)))
@@ -132,7 +132,7 @@
 
 ;;;###autoload
 (define-derived-mode moocode-mode fundamental-mode "MOO"
-  "Major mode for editing LambdaMOO programming language files"
+  "Major mode for editing LambdaMOO programming language files."
   :syntax-table moocode-mode-syntax-table
   :group 'moocode-mode
   (set (make-local-variable 'font-lock-defaults) '(moocode-font-lock-keywords))
@@ -153,7 +153,7 @@
     (modify-syntax-entry ?\[ "(]")
     (modify-syntax-entry ?\] ")[")
     st)
-  "Syntax table for MOO code mode")
+  "Syntax table for MOO code major mode.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keymap
@@ -164,7 +164,7 @@
     (define-key map "\C-j" #'newline-and-indent)
     (define-key map (kbd "TAB") #'moocode-indent-line)
     map)
-  "Keymap for MOO code major mode")
+  "Keymap for MOO code major mode.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide the mode
