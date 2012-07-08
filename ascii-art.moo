@@ -1,4 +1,4 @@
-"Author:     Rhea Myers <rhea@myers.studio> 2012"
+;"Author:     Rhea Myers <rhea@myers.studio> 2012"
 ;"License:   http://creativecommons.org/publicdomain/zero/1.0/"
 ;"           ASCII art from: http://www.asciiworld.com/-Geometry-.html"
 ;"           No idea of the license on that."
