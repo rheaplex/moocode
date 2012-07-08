@@ -28,6 +28,7 @@
 ;;; TODO:
 ;;
 ;; comments
+;; $objects as builtin constants
 ;; strings as object descriptors in declarations
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,13 +56,13 @@
 
 (defconst moocode-font-lock-keywords
   '(;; @commands: @create @edit etc, although see below for @verb and @prop
-    ("^\\s-*\\<@\\w+\\>"
+    ("^\\s-*@\\w+\\b"
      . font-lock-warning-face)
     ;; Types
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
     ;; Keywords
-    ("\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|while\\)\\>"
+    ("\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return \\|while\\)\\>"
      . font-lock-keyword-face)
     ;; Verb declarations
     ("@verb\\s-+\\(\\w+:\\w+\\)\\(.*\\)"
@@ -89,18 +90,26 @@
 ;; Indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun moocode-blank-linep ()
+  "Check whether the current line is empty or consists entirely of whitespace."
+  (looking-at "^\\s-*$"))
+
 (defun moocode-indent-incp ()
+  "Whether the current line result in the indentation level increasing."
   (looking-at "\\s-*\\(?:else\\(?:if\\s-*\\)?\\|for\\(?:k?\\s-*\\)\\|if\\s-*\\|while\\s-*(\\)"))
 
 (defun moocode-indent-decp ()
+  "Whether the current line result in the indentation level decreasing."
   (looking-at "\\s-*\\(?:e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\)"))
 
 (defun moocode-skip-blank-lines ()
+  "Skip lines that are empty or consist entirely of whitespace."
   (while (and (not (bobp))
-	      (looking-at "^\\s-*$"))
+	      (moocode-blank-linep))
     (forward-line -1)))
 
 (defun moocode-indent-current-line ()
+  "Calculate the indentation for the current line and indent it."
   (beginning-of-line)
   (delete-horizontal-space)
    (let ((indent 0))
@@ -125,21 +134,44 @@
       (moocode-indent-current-line)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Define the mode
+;; Check for missing semicolons
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Here so we can customize the variables it defines (e.g. the keymap)
+(defun moocode-line-needs-semicolonp ()
+  "Guess whether the current line should end with a semicolon."
+  (not (looking-at "^\\(^\\s-*$\\|^\\s-*\\<@\\w+\\>\\|^.$\\|^\\s-*;\\|^\\w+$\\|\\s-*\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|while\\)\\>\\)")))
 
-;;;###autoload
-(define-derived-mode moocode-mode fundamental-mode "MOO"
-  "Major mode for editing LambdaMOO programming language files."
-  :syntax-table moocode-mode-syntax-table
-  :group 'moocode-mode
-  (set (make-local-variable 'font-lock-defaults) '(moocode-font-lock-keywords))
-  ;;(set (make-local-variable 'indent-line-function) 'wpdl-indent-line)
-    (setq comment-start "\"")
-    (setq comment-end "\";")
-    (run-mode-hooks))
+(defun moocode-line-ends-with-semicolonp ()
+  "Check whether the current line ends with a semicolon."
+  (looking-at ".+;\\s-*$"))
+
+(defun moocode-editp ()
+  "Check whether the current line is the start of editing a non-verb."
+  (looking-at "^\\s-*\\(\\(?:@\\(?:answer\\|notedit\\|send\\)\\)\\|@edit\\s-+\\w+\\.\\w+\\)"))
+
+(defun moocode-skip-edit ()
+  "Skip the body of an edit (assuming only one entry block)."
+  (while (and (not (eobp))
+	      (not (looking-at "^\\.$")))
+    (forward-line 1)))
+
+(defun moocode-check-semicolons ()
+  "Check the buffer for missing semicolons."
+  (interactive)
+  (save-excursion
+    (beginning-of-buffer)
+    (while (not (eobp))
+      (cond ((moocode-editp) (moocode-skip-edit))
+	    ((moocode-blank-linep) nil) ;; Just skip the line
+	    (t (when (and (moocode-line-needs-semicolonp)
+			  (not (moocode-line-ends-with-semicolonp))
+			  (y-or-n-p "Add semicolon to end of line?"))
+		 (end-of-line)
+		 (insert ";")
+		 (beginning-of-line))))
+      (forward-line 1)))
+  ;; Don't leave the y-or-n-p message showing after finishing 
+  (message nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Syntax table
@@ -161,10 +193,22 @@
 
 (defvar moocode-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-j" #'newline-and-indent)
-    (define-key map (kbd "TAB") #'moocode-indent-line)
+    (define-key map "\C-j" 'newline-and-indent)
+    (define-key map (kbd "TAB") 'moocode-indent-line)
+    (define-key map "\C-c;" 'moocode-check-semicolons)
     map)
   "Keymap for MOO code major mode.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Define the mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-derived-mode moocode-mode fundamental-mode "MOO"
+  "Major mode for editing LambdaMOO programming language files."
+  :group 'moocode-mode
+  (use-local-map moocode-mode-map)
+  (set (make-local-variable 'font-lock-defaults)
+       '(moocode-font-lock-keywords)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide the mode
