@@ -1,8 +1,8 @@
 ;"Author:     Rob Myers <rob@robmyers.org> 2012"
-;"License:   http://creativecommons.org/publicdomain/zero/1.0/"
-;"           ASCII art from: http://www.asciiworld.com/-Geometry-.html"
-;"           No idea of the license on that."
-;"           Feel free to add more and send a merge request. :-)" 
+;"License:    http://creativecommons.org/publicdomain/zero/1.0/"
+;"            ASCII art from: http://www.asciiworld.com/-Geometry-.html"
+;"            No idea of the license on that."
+;"            Feel free to add more and send a merge request. :-)" 
 ;"-----------------------------------------------------------------------------"
 
 @create $feature called "ASCII Art Feature"
