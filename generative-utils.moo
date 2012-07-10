@@ -24,9 +24,9 @@ return shuffled_list[1..n];
 @verb generative_utils:maybe tnt rxd
 @program generative_utils:maybe
 "Call o:(verb)() 1/probability of the time";
-{object, verb, ?prob = 2, ?default = $nothing} = args;
+{object, verb_to_call, ?prob = 2, ?default = $nothing} = args;
 if (random(prob) == 1)
-  result = object:(verb)();
+  result = object:(verb_to_call)();
 else
   result = default;
 endif
@@ -90,7 +90,7 @@ choose_one        (list)
   => one item chosen randomly from list
 choose_n          (list, n)
   => n random items (chosen slowly) from list, n must be <= length(list)
-maybe             (function[ ,probability[, default]]) 
+maybe             (function[ ,probability[, default]])
   => the result of calling function 1/probability of the time, otherwise default
      probability defaults to 2, default defaults to $nothing
 maybe_choose_one  (list[, probability[, default]]) 
