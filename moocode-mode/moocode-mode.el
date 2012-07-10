@@ -63,8 +63,8 @@
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
     ;; Keywords
-    ("\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\>"
-     . font-lock-keyword-face)
+    ("^\\s-*\\(\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\)\\s-*\\([.+]\\s-*\\|(.+)\\s-*\\|;\\)?$"
+     . (1 font-lock-keyword-face))
     ;; Verb declarations
     ("@verb\\s-+\\(\\w+:\\w+\\)\\(.*\\)"
      ;; the verb name
@@ -83,8 +83,8 @@
     ("\\<\\(args\\|argstr\\|caller\.?\\|dobj\.?\\|dobjstr\\|iobj\.?\\|iobjstr\\|player\.?\\|prepstr\\|this\\.?\\|verb\\)\\>"
      . font-lock-variable-name-face)
     ;; Built-in functions
-    ("\\<\\(?:a\\(?:bs\\|cos\\|dd_\\(?:property\\|verb\\)\\|\\(?:si\\|ta\\)n\\)\\|b\\(?:inary_hash\\|oot_player\\|uffered_output_length\\)\\|c\\(?:all\\(?:_function\\|er\\(?:\\(?:_perm\\)?s\\)\\)\\|eil\\|h\\(?:ildren\\|parent\\)\\|lear_property\\|o\\(?:nnect\\(?:ed_\\(?:\\(?:player\\|second\\)s\\)\\|ion_\\(?:name\\|options?\\)\\)\\|sh?\\)\\|r\\(?:eate\\|ypt\\)\\|time\\)\\|d\\(?:b_disk_size\\|e\\(?:code_binary\\|lete_\\(?:property\\|verb\\)\\)\\|\\(?:isassembl\\|ump_databas\\)e\\)\\|e\\(?:ncode_binary\\|qual\\|val\\|xp\\)\\|f\\(?:l\\(?:o\\(?:\\(?:atst\\|o\\)r\\)\\|ush_input\\)\\|orce_input\\|unction_info\\)\\|i\\(?:dle_seconds\\|ndex\\|s_\\(?:clear_property\\|\\(?:memb\\|play\\)er\\)\\)\\|kill_task\\|l\\(?:ength\\|ist\\(?:append\\|delete\\|en\\(?:ers\\)?\\|\\(?:inser\\|se\\)t\\)\\|og\\(?:10\\)?\\)\\|m\\(?:a\\(?:tch\\|x\\(?:_object\\)?\\)\\|emory_usage\\|in\\|ove\\)\\|notify\\|o\\(?:bject_bytes\\|pen_network_connection\\|utput_delimiters\\)\\|p\\(?:a\\(?:rent\\|ss\\)\\|layers\\|ropert\\(?:ies\\|y_info\\)\\)\\|queue\\(?:_info\\|d_tasks\\)\\|r\\(?:a\\(?:ise\\|ndom\\)\\|e\\(?:ad\\|cycle\\|number\\|s\\(?:et_max_object\\|ume\\)\\)\\|index\\|match\\)\\|s\\(?:e\\(?:conds_left\\|rver_\\(?:log\\|version\\)\\|t\\(?:_\\(?:connection_option\\|p\\(?:layer_flag\\|roperty_info\\)\\|task_perms\\|verb_\\(?:args\\|code\\|info\\)\\)\\|add\\|remove\\)\\)\\|hutdown\\|inh?\\|qrt\\|tr\\(?:cmp\\|ing_hash\\|sub\\)\\|u\\(?:bstitute\\|spend\\)\\)\\|t\\(?:a\\(?:nh?\\|sk_\\(?:id\\|stack\\)\\)\\|i\\(?:cks_left\\|me\\)\\|o\\(?:float\\|int\\|literal\\|num\\|obj\\|str\\)\\|runc\\|ypeof\\)\\|unlisten\\|v\\(?:al\\(?:id\\|ue_\\(?:bytes\\|hash\\)\\)\\|erb\\(?:_\\(?:args\\|code\\|info\\)\\|s\\)\\)\\)\\>"
-     . font-lock-builtin-face)
+    ("\\<\\(\\(?:a\\(?:bs\\|cos\\|dd_\\(?:property\\|verb\\)\\|\\(?:si\\|ta\\)n\\)\\|b\\(?:inary_hash\\|oot_player\\|uffered_output_length\\)\\|c\\(?:all\\(?:_function\\|er\\(?:\\(?:_perm\\)?s\\)\\)\\|eil\\|h\\(?:ildren\\|parent\\)\\|lear_property\\|o\\(?:nnect\\(?:ed_\\(?:\\(?:player\\|second\\)s\\)\\|ion_\\(?:name\\|options?\\)\\)\\|sh?\\)\\|r\\(?:eate\\|ypt\\)\\|time\\)\\|d\\(?:b_disk_size\\|e\\(?:code_binary\\|lete_\\(?:property\\|verb\\)\\)\\|\\(?:isassembl\\|ump_databas\\)e\\)\\|e\\(?:ncode_binary\\|qual\\|val\\|xp\\)\\|f\\(?:l\\(?:o\\(?:\\(?:atst\\|o\\)r\\)\\|ush_input\\)\\|orce_input\\|unction_info\\)\\|i\\(?:dle_seconds\\|ndex\\|s_\\(?:clear_property\\|\\(?:memb\\|play\\)er\\)\\)\\|kill_task\\|l\\(?:ength\\|ist\\(?:append\\|delete\\|en\\(?:ers\\)?\\|\\(?:inser\\|se\\)t\\)\\|og\\(?:10\\)?\\)\\|m\\(?:a\\(?:tch\\|x\\(?:_object\\)?\\)\\|emory_usage\\|in\\|ove\\)\\|notify\\|o\\(?:bject_bytes\\|pen_network_connection\\|utput_delimiters\\)\\|p\\(?:a\\(?:rent\\|ss\\)\\|layers\\|ropert\\(?:ies\\|y_info\\)\\)\\|queue\\(?:_info\\|d_tasks\\)\\|r\\(?:a\\(?:ise\\|ndom\\)\\|e\\(?:ad\\|cycle\\|number\\|s\\(?:et_max_object\\|ume\\)\\)\\|index\\|match\\)\\|s\\(?:e\\(?:conds_left\\|rver_\\(?:log\\|version\\)\\|t\\(?:_\\(?:connection_option\\|p\\(?:layer_flag\\|roperty_info\\)\\|task_perms\\|verb_\\(?:args\\|code\\|info\\)\\)\\|add\\|remove\\)\\)\\|hutdown\\|inh?\\|qrt\\|tr\\(?:cmp\\|ing_hash\\|sub\\)\\|u\\(?:bstitute\\|spend\\)\\)\\|t\\(?:a\\(?:nh?\\|sk_\\(?:id\\|stack\\)\\)\\|i\\(?:cks_left\\|me\\)\\|o\\(?:float\\|int\\|literal\\|num\\|obj\\|str\\)\\|runc\\|ypeof\\)\\|unlisten\\|v\\(?:al\\(?:id\\|ue_\\(?:bytes\\|hash\\)\\)\\|erb\\(?:_\\(?:args\\|code\\|info\\)\\|s\\)\\)\\)\\)\\s-*("
+     . (1 font-lock-builtin-face))
     ;; Objects on #1 such as $thing and $string_utils
     ("\\<$\\w+\\>"
      . font-lock-constant-face))
@@ -237,6 +237,7 @@
   "Major mode for editing LambdaMOO programming language files."
   :group 'moocode-mode
   (use-local-map moocode-mode-map)
+  (set (make-local-variable 'font-lock-multiline) t)
   (set (make-local-variable 'font-lock-defaults)
        '(moocode-font-lock-keywords)))
 
