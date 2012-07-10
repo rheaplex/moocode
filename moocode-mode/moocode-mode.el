@@ -27,9 +27,9 @@
 
 ;;; TODO:
 ;;
-;; comments
+;; ;"comments"
 ;; strings as object descriptors in declarations
-;; fix return highlighting
+;; fix intermittant return highlighting (see generative-utils.moo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization
@@ -57,7 +57,7 @@
 (defconst moocode-font-lock-keywords
   '(;; @commands: @create @edit etc, although see below for @verb and @prop
     ("^\\s-*@\\w+\\b"
-     . font-lock-warning-face)
+     . font-lock-preprocessor-face)
     ;; Types
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
@@ -72,11 +72,12 @@
     ("^\\s-*{" "\\(\\(\\<\\w+\\>\\)[^,]*\\|\\(\\)\\s-*}\\)" nil nil
      (2 font-lock-variable-name-face))
     ;; Verb declarations
-    ("@verb\\s-+\\(\\w+:\\w+\\)\\(.*\\)"
+    ;; Some unused capture to ensure there's always a 2
+    ("^\\s-@verb\\s-+\\(\\(\".+\"\\|\\w+\\):\\(\\w+\\)\\)\\(.*\\)$"
      ;; the verb name
-     (1 font-lock-function-name-face)
+     (3 font-lock-function-name-face)
      ;; The verb spec and permissions
-     (2 font-lock-constant-face))
+     (4 font-lock-constant-face))
     ;; Property declarations
     ("@\\(prop\\|property\\)\\s-+\\(\\w+\\.\\w+\\)\\(.+\\s-+\\([rwc]+\\)\\)?"
      ;; The property name
@@ -243,7 +244,6 @@
   "Major mode for editing LambdaMOO programming language files."
   :group 'moocode-mode
   (use-local-map moocode-mode-map)
-  (set (make-local-variable 'font-lock-multiline) t)
   (set (make-local-variable 'font-lock-defaults)
        '(moocode-font-lock-keywords)))
 
