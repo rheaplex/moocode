@@ -29,7 +29,7 @@
 
 (concat "\\<"
 	(regexp-opt '("break" "continue" "else" "elseif" "endif" "endfor"
-		      "endfork" "endwhile" "for" "fork" "if" "return ""while"))
+		      "endfork" "endwhile" "for" "fork" "if" "return" "while"))
 	"\\>")
 
 ;; Variables

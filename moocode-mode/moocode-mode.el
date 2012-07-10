@@ -30,6 +30,7 @@
 ;; comments
 ;; $objects as builtin constants
 ;; strings as object descriptors in declarations
+;; Let tab work in @edit blocks? (Probably not.)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization
@@ -62,7 +63,7 @@
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
     ;; Keywords
-    ("\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return \\|while\\)\\>"
+    ("\\<\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\>"
      . font-lock-keyword-face)
     ;; Verb declarations
     ("@verb\\s-+\\(\\w+:\\w+\\)\\(.*\\)"
@@ -83,26 +84,53 @@
      . font-lock-variable-name-face)
     ;; Built-in functions
     ("\\<\\(?:a\\(?:bs\\|cos\\|dd_\\(?:property\\|verb\\)\\|\\(?:si\\|ta\\)n\\)\\|b\\(?:inary_hash\\|oot_player\\|uffered_output_length\\)\\|c\\(?:all\\(?:_function\\|er\\(?:\\(?:_perm\\)?s\\)\\)\\|eil\\|h\\(?:ildren\\|parent\\)\\|lear_property\\|o\\(?:nnect\\(?:ed_\\(?:\\(?:player\\|second\\)s\\)\\|ion_\\(?:name\\|options?\\)\\)\\|sh?\\)\\|r\\(?:eate\\|ypt\\)\\|time\\)\\|d\\(?:b_disk_size\\|e\\(?:code_binary\\|lete_\\(?:property\\|verb\\)\\)\\|\\(?:isassembl\\|ump_databas\\)e\\)\\|e\\(?:ncode_binary\\|qual\\|val\\|xp\\)\\|f\\(?:l\\(?:o\\(?:\\(?:atst\\|o\\)r\\)\\|ush_input\\)\\|orce_input\\|unction_info\\)\\|i\\(?:dle_seconds\\|ndex\\|s_\\(?:clear_property\\|\\(?:memb\\|play\\)er\\)\\)\\|kill_task\\|l\\(?:ength\\|ist\\(?:append\\|delete\\|en\\(?:ers\\)?\\|\\(?:inser\\|se\\)t\\)\\|og\\(?:10\\)?\\)\\|m\\(?:a\\(?:tch\\|x\\(?:_object\\)?\\)\\|emory_usage\\|in\\|ove\\)\\|notify\\|o\\(?:bject_bytes\\|pen_network_connection\\|utput_delimiters\\)\\|p\\(?:a\\(?:rent\\|ss\\)\\|layers\\|ropert\\(?:ies\\|y_info\\)\\)\\|queue\\(?:_info\\|d_tasks\\)\\|r\\(?:a\\(?:ise\\|ndom\\)\\|e\\(?:ad\\|cycle\\|number\\|s\\(?:et_max_object\\|ume\\)\\)\\|index\\|match\\)\\|s\\(?:e\\(?:conds_left\\|rver_\\(?:log\\|version\\)\\|t\\(?:_\\(?:connection_option\\|p\\(?:layer_flag\\|roperty_info\\)\\|task_perms\\|verb_\\(?:args\\|code\\|info\\)\\)\\|add\\|remove\\)\\)\\|hutdown\\|inh?\\|qrt\\|tr\\(?:cmp\\|ing_hash\\|sub\\)\\|u\\(?:bstitute\\|spend\\)\\)\\|t\\(?:a\\(?:nh?\\|sk_\\(?:id\\|stack\\)\\)\\|i\\(?:cks_left\\|me\\)\\|o\\(?:float\\|int\\|literal\\|num\\|obj\\|str\\)\\|runc\\|ypeof\\)\\|unlisten\\|v\\(?:al\\(?:id\\|ue_\\(?:bytes\\|hash\\)\\)\\|erb\\(?:_\\(?:args\\|code\\|info\\)\\|s\\)\\)\\)\\>"
-     . font-lock-builtin-face))
+     . font-lock-builtin-face)
+    ;; Objects on #1 such as $thing and $string_utils
+    ("\\<$\\w+\\>"
+     . font-lock-constant-face))
   "Highlighting for MOO code major mode.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun moocode-indent-incp ()
+  "Whether the current line should result in the indentation level increasing."
+  (looking-at "\\s-*\\(?:else\\(?:if\\s-*\\)?\\|for\\(?:k?\\s-*\\)\\|if\\s-*\\|while\\s-*(\\)"))
+
+(defun moocode-indent-decp ()
+  "Whether the current line should result in the indentation level decreasing."
+  (looking-at "\\s-*\\(?:e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\)"))
+
 (defun moocode-blank-linep ()
   "Check whether the current line is empty or consists entirely of whitespace."
   (looking-at "^\\s-*$"))
 
-(defun moocode-indent-incp ()
-  "Whether the current line result in the indentation level increasing."
-  (looking-at "\\s-*\\(?:else\\(?:if\\s-*\\)?\\|for\\(?:k?\\s-*\\)\\|if\\s-*\\|while\\s-*(\\)"))
+(defun moocode-property-edit-linep ()
+  "Check whether the current line is the start of @edit-ing a property."
+    (looking-at "^\\s-*\\(\\(?:@\\(?:answer\\|notedit\\|send\\)\\)\\|@edit\\s-+\\w+\\.\\w+\\)"))
 
-(defun moocode-indent-decp ()
-  "Whether the current line result in the indentation level decreasing."
-  (looking-at "\\s-*\\(?:e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\)"))
+(defun moocode-point-in-property-editp (rlimit)
+  "Reverse from (point), checking if a property @edit began before rlimit."
+  ;; In verb code downloaded from the MOO, we'll hit (point-min) quickly
+  ;; In files of @create @edit etc. we'll hit an @... quickly
+  ;; So this isn't quite as bad as it may look
+  (save-excursion
+    (beginning-of-line)
+    (let ((is nil)
+	  (keep-searching t))
+      (while (and (> (point) rlimit)
+		  keep-searching)
+	;; Looking at a line starting with @? Whatever it is, we should finish
+	(when (looking-at "^\\s-*@")
+	  (setf keep-searching nil)
+	  ;; Looking at the start of a property @edit?
+	  (when (moocode-property-edit-linep)
+	    (setf is t)))
+	(forward-line -1))
+      is)))
 
-(defun moocode-skip-blank-lines ()
+(defun moocode-skip-blank-lines-backward ()
   "Skip lines that are empty or consist entirely of whitespace."
   (while (and (not (bobp))
 	      (moocode-blank-linep))
@@ -118,7 +146,7 @@
      (save-excursion
        (if (not (eq (forward-line -1) -1))
 	   (progn
-	     (moocode-skip-blank-lines)
+	     (moocode-skip-blank-lines-backward)
 	     (back-to-indentation)
 	     (if (moocode-indent-incp)
 		 (incf indent moocode-indent))
@@ -130,8 +158,14 @@
 (defun moocode-indent-line ()
   "Indent the current line as MOO code."
   (interactive)
+      (if (not (moocode-point-in-property-editp (point-min)))
+	  (moocode-indent-current-line)))
+
+(defun moocode-tab ()
+  "Handle the user pressing TAB."
+  (interactive)
   (if moocode-tab-indent
-      (moocode-indent-current-line)))
+      (moocode-indent-line)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Check for missing semicolons
@@ -145,12 +179,8 @@
   "Check whether the current line ends with a semicolon."
   (looking-at ".+;\\s-*$"))
 
-(defun moocode-editp ()
-  "Check whether the current line is the start of editing a non-verb."
-  (looking-at "^\\s-*\\(\\(?:@\\(?:answer\\|notedit\\|send\\)\\)\\|@edit\\s-+\\w+\\.\\w+\\)"))
-
-(defun moocode-skip-edit ()
-  "Skip the body of an edit (assuming only one entry block)."
+(defun moocode-skip-edit-forward ()
+  "Skip most of the body of an @edit (assuming it contains one entry block)."
   (while (and (not (eobp))
 	      (not (looking-at "^\\.$")))
     (forward-line 1)))
@@ -161,7 +191,7 @@
   (save-excursion
     (beginning-of-buffer)
     (while (not (eobp))
-      (cond ((moocode-editp) (moocode-skip-edit))
+      (cond ((moocode-edit-propertyp) (moocode-skip-edit-forward))
 	    ((moocode-blank-linep) nil) ;; Just skip the line
 	    (t (when (and (moocode-line-needs-semicolonp)
 			  (not (moocode-line-ends-with-semicolonp))
@@ -194,7 +224,7 @@
 (defvar moocode-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-j" 'newline-and-indent)
-    (define-key map (kbd "TAB") 'moocode-indent-line)
+    (define-key map (kbd "TAB") 'moocode-tab)
     (define-key map "\C-c;" 'moocode-check-semicolons)
     map)
   "Keymap for MOO code major mode.")
