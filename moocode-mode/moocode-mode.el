@@ -28,9 +28,8 @@
 ;;; TODO:
 ;;
 ;; comments
-;; $objects as builtin constants
 ;; strings as object descriptors in declarations
-;; Let tab work in @edit blocks? (Probably not.)
+;; fix return highlighting
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization
@@ -63,8 +62,15 @@
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
     ;; Keywords
-    ("^\\s-*\\(\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\)\\s-*\\([.+]\\s-*\\|(.+)\\s-*\\|;\\)?$"
+    ("^\\s-*\\(\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\)\\s-*\\([.+]\\|(.+)\\|;\\|\\s-+.+;\\)?\\s-*$"
      . (1 font-lock-keyword-face))
+    ;; Single local variable declarations
+    ("^\\s-*\\(\\w+\\)\\s-*=[^=]"
+     (1 font-lock-variable-name-face))
+    ;; Multiple local variable declarations
+    ;; Note \\(\\) to ensure there's always a 2, even if empty
+    ("^\\s-*{" "\\(\\(\\<\\w+\\>\\)[^,]*\\|\\(\\)\\s-*}\\)" nil nil
+     (2 font-lock-variable-name-face))
     ;; Verb declarations
     ("@verb\\s-+\\(\\w+:\\w+\\)\\(.*\\)"
      ;; the verb name
