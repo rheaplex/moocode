@@ -85,7 +85,7 @@ return result;
 @edit generative_utils.help_msg
 delete
 enter
-Utilities for generating random respnses and descriptions.
+Utilities for generating random responses and descriptions.
 choose_one        (list)
   => one item chosen randomly from list
 choose_n          (list, n)
