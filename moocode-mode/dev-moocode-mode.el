@@ -27,12 +27,10 @@
 
 ;; keywords
 
-(concat "^\\s-*\\("
+(concat "^\\s-*"
 	(regexp-opt '("break" "continue" "else" "elseif" "endif" "endfor"
 		      "endfork" "endwhile" "for" "fork" "if" "return" "while"))
-	;; FIXME: \\s-+.+; is for return without () .
-	;;        return should be a separate case...
-	"\\)\\s-*\\([.+]\\|(.+)\\|;\\|\\s-+.+;\\)?\\s-*$")
+	"\\>")
 
 ;; Variables
 ;; FIXME: handle this.(prop) properly (dot isn't colored at the moment)
