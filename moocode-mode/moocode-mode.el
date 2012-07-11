@@ -29,7 +29,6 @@
 ;;
 ;; ;"comments"
 ;; strings as object descriptors in declarations
-;; fix intermittant return highlighting (see generative-utils.moo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization
@@ -62,8 +61,9 @@
     ("\\<\\(ERR\\|FLOAT\\|INT\\|LIST\\|NUM\\|OBJ\\|STR\\)\\>"
      . font-lock-constant-face)
     ;; Keywords
-    ("^\\s-*\\(\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\)\\s-*\\([.+]\\|(.+)\\|;\\|\\s-+.+;\\)?\\s-*$"
-     . (1 font-lock-keyword-face))
+    ("^\\s-*\\(?:break\\|continue\\|e\\(?:lse\\(?:if\\)?\\|nd\\(?:fork?\\|if\\|while\\)\\)\\|fork?\\|if\\|return\\|while\\)\\>"
+     ;; Yes, zero. Weird
+     . (0 font-lock-keyword-face))
     ;; Single local variable declarations
     ("^\\s-*\\(\\w+\\)\\s-*=[^=]"
      (1 font-lock-variable-name-face))
@@ -72,8 +72,7 @@
     ("^\\s-*{" "\\(\\(\\<\\w+\\>\\)[^,]*\\|\\(\\)\\s-*}\\)" nil nil
      (2 font-lock-variable-name-face))
     ;; Verb declarations
-    ;; Some unused capture to ensure there's always a 2
-    ("^\\s-@verb\\s-+\\(\\(\".+\"\\|\\w+\\):\\(\\w+\\)\\)\\(.*\\)$"
+    ("^\\S-*@verb\\s-+\\(\\(\".+\"\\|\\w+\\):\\(\\w+\\)\\)\\(.*\\)$"
      ;; the verb name
      (3 font-lock-function-name-face)
      ;; The verb spec and permissions
@@ -103,7 +102,7 @@
 
 (defun moocode-indent-incp ()
   "Whether the current line should result in the indentation level increasing."
-  (looking-at "\\s-*\\(?:else\\(?:if\\s-*\\)?\\|for\\(?:k?\\s-*\\)\\|if\\s-*\\|while\\s-*(\\)"))
+  (looking-at "\\s-*\\(?:else\\(?:if\\s-*\\)?\\|for\\(?:k?\\s-*\\)\\|if\\s-*\\|while\\)\\>"))
 
 (defun moocode-indent-decp ()
   "Whether the current line should result in the indentation level decreasing."
