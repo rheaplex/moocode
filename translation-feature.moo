@@ -5,7 +5,7 @@
 @create $feature called "Translation Feature"
 
 @describe "Translation Feature" as "A feature object for translating says."
-@edit "Translation Feature".help_msg
+@notedit "Translation Feature".help_msg
 delete
 enter
 A feature object for translating text and saying it out loud.
