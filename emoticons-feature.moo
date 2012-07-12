@@ -7,7 +7,7 @@
 @create $feature called "Emoticons Feature"
 
 @describe "Emoticons Feature" as "A feature object for emoting emoticons."
-@edit "Emoticons Feature".help_msg
+@notedit "Emoticons Feature".help_msg
 delete
 enter
 A feature that simplifies emoting emoticons.

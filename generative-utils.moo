@@ -82,7 +82,7 @@ object.(state) = listdelete(object.(state), 1);
 return result;
 .
 
-@edit generative_utils.help_msg
+@notedit generative_utils.help_msg
 delete
 enter
 Utilities for generating random responses and descriptions.

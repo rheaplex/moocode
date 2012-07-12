@@ -9,7 +9,7 @@
 
 @describe "ASCII Art Feature" as "A feature object for emoting ASCII art."
 
-@edit "ASCII Art Feature".help_msg
+@notedit "ASCII Art Feature".help_msg
 delete
 enter
 Each verb emotes the described ASCII art to everyone in the room.
