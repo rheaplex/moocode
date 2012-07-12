@@ -46,6 +46,13 @@
 	(regexp-opt '("abs" "acos" "add_property" "add_verb" "asin" "atan" "binary_hash" "boot_player" "buffered_output_length" "caller_perms" "callers" "call_function" "ceil" "children" "chparent" "clear_property" "connected_players" "connected_seconds" "connection_name" "connection_option" "connection_options" "cos" "cosh" "create" "crypt" "ctime" "db_disk_size" "decode_binary" "delete_property" "delete_verb" "disassemble" "dump_database" "encode_binary" "equal" "eval" "exp" "floatstr" "floor" "flush_input" "force_input" "function_info" "idle_seconds" "index" "is_clear_property" "is_member" "is_player" "kill_task" "length" "listappend" "listdelete" "listen" "listeners" "listinsert" "listset" "log" "log10" "match" "max" "max_object" "memory_usage" "min" "move" "notify" "object_bytes" "open_network_connection" "output_delimiters" "parent" "pass" "players" "properties" "property_info" "queued_tasks" "queue_info" "raise" "random" "read" "recycle" "renumber" "reset_max_object" "resume" "rindex" "rmatch" "seconds_left" "server_log" "server_version" "setadd" "set_connection_option" "set_player_flag" "set_property_info" "setremove" "set_task_perms" "set_verb_args" "set_verb_code" "set_verb_info" "shutdown" "sin" "sinh" "sqrt" "strcmp" "string_hash" "strsub" "substitute" "suspend" "tan" "tanh" "task_id" "task_stack" "ticks_left" "time" "tofloat" "toint" "toliteral" "tonum" "toobj" "tostr" "trunc" "typeof" "unlisten" "valid" "value_bytes" "value_hash" "verb_args" "verb_code" "verb_info" "verbs"))
 	"\\)\\s-*(")
 
+;; Start non-@program @blocks (to be treated effectively as here comments)
+
+
+(concat "^\s-*@"
+	(regexp-opt '("answer" "edit" "notedit" "send"))
+	"")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

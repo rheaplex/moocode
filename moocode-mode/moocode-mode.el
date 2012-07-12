@@ -1,6 +1,8 @@
 ;;; moocode-mode.el - Major mode for editing LambdaMOO code files
 ;;
 ;; Copyright (C) 2012 Rob Myers <rob@robmyers.org>
+;; moocode-font-lock-(maybe)-notedit adapted from ruby-mode.el
+;; Copyright (C) 1994-2008 Free Software Foundation, Inc.
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -53,8 +55,34 @@
 ;; Syntax highlighting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun moocode-font-lock-notedit (limit)
+  (when (re-search-forward "^@notedit\\>" limit t)
+    (end-of-line)
+    (let ((from (point)))
+      (forward-line 1)
+      (when (re-search-forward "^\\.$" limit t)
+	(beginning-of-line)
+	(set-match-data (list from (point)))
+	t))))
+
+(defun moocode-font-lock-maybe-notedit (limit)
+  (let (from)
+    (save-excursion
+      (when (and (re-search-backward "^\\(@notedit\\>\\|\\.$\\)" nil t)
+		 (string= (match-string 1) "@notedit"))
+	(end-of-line)
+	(setq from (point))))
+    (if (and from (and (re-search-forward "^\\(@notedit\\>\\|\\.$\\)" nil t)
+		       (string= (match-string 1) ".")))
+	(save-excursion
+	  (beginning-of-line)
+	  (set-match-data (list beg (point)))
+	  t)
+      nil)))
+
 (defconst moocode-font-lock-keywords
-  '(;; @commands: @create @edit etc, although see below for @verb and @prop
+  '(
+    ;; @commands: @create @edit etc, although see below for @verb and @prop
     ("^\\s-*@\\w+\\b"
      . font-lock-preprocessor-face)
     ;; Types
@@ -93,7 +121,14 @@
      . (1 font-lock-builtin-face))
     ;; Objects on #1 such as $thing and $string_utils
     ("\\<$\\w+\\>"
-     . font-lock-constant-face))
+     . font-lock-constant-face)
+    ;; Don't format the contents of @notedit blocks as code 
+    ;; (In fact, overwrite any highlighting with the default font)
+    (moocode-font-lock-notedit
+     0 'default t)
+    (moocode-font-lock-maybe-notedit
+     0 'default t)
+  )
   "Highlighting for MOO code major mode.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -243,6 +278,7 @@
   "Major mode for editing LambdaMOO programming language files."
   :group 'moocode-mode
   (use-local-map moocode-mode-map)
+   (make-local-variable 'font-lock-extend-region-functions)
   (set (make-local-variable 'font-lock-defaults)
        '(moocode-font-lock-keywords)))
 
