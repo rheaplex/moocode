@@ -21,29 +21,29 @@ save
 
 @property Aquarium.quantities {"A", "A pair of", "A few", "Some", "A shoal of"} rc
 
-@property Aquarium.personalities {"careless", "cheeky", "cheerful", "nervous"} rc
+@property Aquarium.personalities {"careless", "cheeky", "cheerful", "nervous", "playful", "snooty", "over-enthusiastic", "calm", "serene", "friendly", "fast-moving", "slow-moving"} rc
 
-@property Aquarium.shapes {"tiny", "spindly", "streamlined", "plump"} rc
+@property Aquarium.shapes {"tiny", "spindly", "streamlined", "plump", "spiky", "toothsome", "big-eyed", "flat", "scaly", "smooth", "nondescript", "cute", "small", "round", "triangular"} rc
 
-@property Aquarium.qualities {"iridescent", "sparkling", "mottled"} rc
+@property Aquarium.qualities {"iridescent", "sparkling", "mottled", "dull", "shiny", "striped", "spotty", "plain", "matt", "soft"} rc
 
-@property Aquarium.hues {"red", "orange", "yellow", "green", "blue", "purple", "pink", "silver", "golden"} rc
+@property Aquarium.hues {"red", "orange", "yellow", "green", "blue", "purple", "pink", "silver", "gold", "black", "white", "brown", "turquoise", "cyan", "magenta"} rc
 
-@property Aquarium.actions {"%<blows> bubbles at you.", "%<seems> to wink at you.", "%<swims> lazily around the aquarium.", "%<darts> betwen the plants in the aquarium."} rc
+@property Aquarium.actions {"%<blows> bubbles at you from the aquarium.", "%<swims> lazily around the aquarium.", "%<swims> betwen the plants in the aquarium.", "%<floats> close to the glass at the front of the aquarium.", "%<swims> around the aquarium.", "%<bobs> up and down near the surface of the water in the aquarium.", "%<swims> around the edges of the aquarium.", "%<swims> toward the front of the aquarium", "%<swims> away from the front of the aquarium", "%<nibbles> at the plants in the aquarium."} rc
 
 
-@property Aquarium.events {"A trail of bubbles snakes up through the water of the aquarium.", "The plants in the aquarium sway gently in the current from the aerator.", "The fish in the aquarium seem to all change the direction they are swimming in at once."} rc
+@property Aquarium.events {"A trail of bubbles snakes up through the water of the aquarium.", "The plants in the aquarium sway gently.", "The fish in the aquarium seem to all change the direction they are swimming in at once.", "Light from the aquarium dances on the floor.", "You notice that all the fish in the aquarium seem to have vanished, although when you look closer they are just hiding behind the rocks and plants.", "A single large bubble works its way up through the water of the aquarium.", "There is a sudden flurry of motion in the aquarium.", "The fish in the aquarium swim to and fro."} rc
 
-@property Aquarium.tap_messages {"Don't do that.", "The fish flee from the tapping.", "The fish ignore the tapping.", "A particularly dangerous looking fish swims over and looks hungrily at some tasty-looking fingers."} rc
+@property Aquarium.tap_messages {"Don't do that.", "The fish flee from the tapping.", "The fish ignore the tapping.", "A particularly dangerous looking fish swims over and looks hungrily at some tasty-looking fingers.", "Some of the fish closest to the glass flee the tapping.", "One of the fish blows bubbles at you."} rc
 
-@property Aquarium.feed_messages {"Omnomnom...", "There is a brief feeding frenzy as the fish surface to eat."} rc
+@property Aquarium.feed_messages {"Omnomnom...", "There is a brief feeding frenzy.", "Some fish swim up to the food and nibble.", "The fish feed happily.", "Fishy foody time!", "Nomnomnom.", "The larger fish push to the surface to feed, the smaller fish pick off the scraps that float down into the water.", "The fish quickly remove any trace of food from the water."} rc
 
 @property Aquarium.fed_messages {"They don't need any more just now."} rc
 
 
-@property Aquarium.response_delay 20 rc
+@property Aquarium.response_delay 30 rc
 @property Aquarium.feed_time_delay 120 rc
-@property Aquarium.action_odds 4 rc
+@property Aquarium.action_odds 5 rc
 
 
 ;"-----------------------------------------------------------------------------"
