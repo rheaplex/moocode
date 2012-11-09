@@ -19,6 +19,7 @@ emm => :-/
 emw => ;-)
 .
 save
+done
 
 @property "Emoticons Feature".ems ":-)" rc
 @property "Emoticons Feature".emf ":-(" rc
