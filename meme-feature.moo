@@ -40,7 +40,7 @@ done
 @property "Meme Feature".om "OM NOM NOM NOM" r
 @property "Meme Feature".or "O RLY?" r
 @property "Meme Feature".sp "THIS IS SPARTA!" r
-@property "Meme Feature".wa "Watch out guys, we’re dealing with a badass over here." r
+@property "Meme Feature".wa "Watch out guys, we're dealing with a badass over here." r
 @property "Meme Feature".ya "YA RLY" r
 
 ;"Verbs that take a string"
